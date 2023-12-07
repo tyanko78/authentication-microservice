@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"outDir": "./dist", // The compiled JavaScript files will be placed in the 'dist' directory
+		// Other options...
+	},
+	// Other settings...
+}

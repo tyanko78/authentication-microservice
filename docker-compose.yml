@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  authentication-microservice:
+    container_name: authentication-microservice
+    restart: on-failure:3
+    build:
+      context: ./authentication-microservice/
+    environment:
+      NODE_ENV: "production"
+      MICROSERVICE_NAME: "Authentication Service"
+      INTERNAL_PORT: $INTERNAL_PORT
+      EXTERNAL_PORT: $EXTERNAL_PORT
+      BASE_HOST: $BASE_HOST
+      LOG_LEVEL: $LOG_LEVEL
+      LOG_HISTORY: $LOG_HISTORY
+      LOG_NAME: "auth"
+      DEFAULT_ADMIN: $DEFAULT_ADMIN
+      DEFAULT_EMAIL: $DEFAULT_EMAIL
+      DEFAULT_PASSWORD: $DEFAULT_PASSWORD
+      REQUIRE_AUTH: $REQUIRE_AUTH
+      JWT_SECRET_KEY: $JWT_SECRET_KEY
+      JWT_TOKEN_EXPIRE: $JWT_TOKEN_EXPIRE
+      MONGODB_USER: $MONGODB_USER
+      MONGODB_PASSWORD: $MONGODB_PASSWORD
+      DATABASE_CONNECTION: "${MONGODB_HOST}:${MONGODB_PORT}/${MONGODB_DATABASE}"
+    volumes:
+      - ./authentication-microservice/:/app
+      - /app/node_modules
+      - ./log/auth:/app/log
+    ports:
+      - $AUTHENTICATION_EXTERNAL_PORT:$AUTHENTICATION_INTERNAL_PORT
+    depends_on:
+      mongo-initialise:
+        condition: service_completed_successfully
+    networks:
+      - network
